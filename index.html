@@ -1,0 +1,1341 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>M.CAPITAL CRYPTO — Copy Trading Hyperliquid</title>
+  <!-- ══ SÉCURITÉ ══ -->
+  <meta http-equiv="X-Content-Type-Options" content="nosniff"/>
+  <meta http-equiv="X-Frame-Options" content="DENY"/>
+  <meta http-equiv="X-XSS-Protection" content="1; mode=block"/>
+  <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin"/>
+  <meta http-equiv="Permissions-Policy" content="camera=(), microphone=(), geolocation=()"/>
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self' https://fonts.googleapis.com https://fonts.gstatic.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; script-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'none';"/>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;900&family=Rajdhani:wght@300;400;500;600&family=Share+Tech+Mono&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:        #010308;
+      --bg2:       #020818;
+      --blue:      #0099ff;
+      --cyan:      #00ddff;
+      --cyan-dim:  #0077aa;
+      --white:     #e8f4ff;
+      --grey:      #4a7a99;
+      --border:    rgba(0,153,255,0.18);
+      --border2:   rgba(0,220,255,0.25);
+      --glow:      0 0 20px rgba(0,200,255,0.4), 0 0 60px rgba(0,100,255,0.2);
+      --glow-sm:   0 0 10px rgba(0,200,255,0.35);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--white);
+      font-family: 'Rajdhani', sans-serif;
+      font-weight: 400;
+      overflow-x: hidden;
+    }
+
+    /* ── GRID BACKGROUND ── */
+    body::before {
+      content: '';
+      position: fixed; inset: 0;
+      background-image:
+        linear-gradient(rgba(0,150,255,0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0,150,255,0.04) 1px, transparent 1px);
+      background-size: 60px 60px;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* ── SCAN LINE ── */
+    body::after {
+      content: '';
+      position: fixed; inset: 0;
+      background: repeating-linear-gradient(
+        0deg, transparent, transparent 2px,
+        rgba(0,0,0,0.03) 2px, rgba(0,0,0,0.03) 4px
+      );
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    /* ══════════════════════════════════
+       NAV
+    ══════════════════════════════════ */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0;
+      z-index: 200;
+      padding: 20px 60px;
+      display: flex; justify-content: space-between; align-items: center;
+      transition: all 0.4s;
+    }
+    nav.scrolled {
+      background: rgba(1,3,8,0.92);
+      border-bottom: 1px solid var(--border);
+      backdrop-filter: blur(16px);
+      padding: 14px 60px;
+    }
+    .nav-logo {
+      display: flex; align-items: center; gap: 14px;
+      text-decoration: none;
+    }
+    .nav-logo-svg { width: 38px; height: 38px; }
+    .nav-logo-text {
+      font-family: 'Orbitron', monospace;
+      font-size: 13px; font-weight: 700;
+      letter-spacing: 0.12em;
+      color: var(--white);
+    }
+    .nav-logo-text span { color: var(--cyan); }
+    .nav-links { display: flex; gap: 36px; align-items: center; }
+    .nav-links a {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 11px; letter-spacing: 0.15em;
+      text-transform: uppercase; color: var(--grey);
+      text-decoration: none; transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--cyan); }
+    .nav-cta {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase;
+      color: var(--bg); background: var(--cyan);
+      padding: 10px 24px; border: none; cursor: pointer;
+      text-decoration: none; clip-path: polygon(8px 0%, 100% 0%, calc(100% - 8px) 100%, 0% 100%);
+      transition: background 0.2s, box-shadow 0.2s;
+    }
+    .nav-cta:hover { background: #33eeff; box-shadow: var(--glow-sm); }
+
+    /* ══════════════════════════════════
+       HERO
+    ══════════════════════════════════ */
+    .hero {
+      position: relative; min-height: 100vh;
+      display: flex; align-items: center;
+      padding: 120px 60px 80px;
+      overflow: hidden; z-index: 2;
+    }
+    /* Glow blob derrière le logo */
+    .hero-glow {
+      position: absolute; right: 5%; top: 50%;
+      transform: translateY(-50%);
+      width: 600px; height: 600px;
+      background: radial-gradient(ellipse, rgba(0,100,255,0.25) 0%, rgba(0,50,150,0.1) 40%, transparent 70%);
+      pointer-events: none;
+    }
+    .hero-content { position: relative; z-index: 2; max-width: 620px; }
+    .hero-badge {
+      display: inline-flex; align-items: center; gap: 8px;
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 10px; letter-spacing: 0.25em; text-transform: uppercase;
+      color: var(--cyan); border: 1px solid var(--border2);
+      padding: 7px 16px; margin-bottom: 36px;
+      animation: fadeUp 0.7s ease both;
+    }
+    .hero-badge::before {
+      content: ''; width: 6px; height: 6px; border-radius: 50%;
+      background: var(--cyan); box-shadow: 0 0 8px var(--cyan);
+      animation: pulse 2s infinite;
+    }
+    @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
+
+    .hero h1 {
+      font-family: 'Orbitron', monospace;
+      font-size: clamp(38px, 5.5vw, 72px);
+      font-weight: 900; line-height: 1.05;
+      letter-spacing: -0.01em;
+      animation: fadeUp 0.7s ease 0.1s both;
+    }
+    .hero h1 .line2 {
+      color: transparent;
+      -webkit-text-stroke: 1px var(--cyan);
+      text-shadow: 0 0 30px rgba(0,220,255,0.4);
+    }
+    .hero-sub {
+      margin-top: 28px; font-size: 17px; font-weight: 400;
+      color: rgba(200,230,255,0.65); line-height: 1.7; max-width: 480px;
+      animation: fadeUp 0.7s ease 0.2s both;
+    }
+    .hero-actions {
+      margin-top: 48px; display: flex; gap: 16px; align-items: center;
+      animation: fadeUp 0.7s ease 0.3s both;
+    }
+    .btn-primary {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 12px; letter-spacing: 0.15em; text-transform: uppercase;
+      color: var(--bg); background: var(--cyan);
+      padding: 16px 40px; border: none; cursor: pointer;
+      text-decoration: none; display: inline-block;
+      clip-path: polygon(10px 0%, 100% 0%, calc(100% - 10px) 100%, 0% 100%);
+      transition: all 0.2s; box-shadow: 0 0 30px rgba(0,200,255,0.3);
+    }
+    .btn-primary:hover { background: #33eeff; box-shadow: var(--glow); }
+    .btn-ghost {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 11px; letter-spacing: 0.15em; text-transform: uppercase;
+      color: var(--grey); background: transparent;
+      padding: 16px 0; border: none; cursor: pointer;
+      text-decoration: none; display: inline-flex; align-items: center; gap: 8px;
+      transition: color 0.2s;
+    }
+    .btn-ghost:hover { color: var(--cyan); }
+    .btn-ghost::after { content: '↓'; font-size: 14px; }
+
+    /* Logo hero côté droit */
+    .hero-logo {
+      position: absolute; right: 60px; top: 50%;
+      transform: translateY(-50%);
+      width: 420px; opacity: 0.92;
+      animation: fadeUp 0.9s ease 0.4s both;
+      z-index: 2;
+    }
+
+    /* ── TICKER ── */
+    .ticker-wrap {
+      position: relative; z-index: 2;
+      overflow: hidden;
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      padding: 12px 0; background: rgba(0,10,30,0.8);
+    }
+    .ticker { display: flex; animation: ticker 25s linear infinite; white-space: nowrap; }
+    .ticker-item {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase;
+      color: var(--grey); padding: 0 40px;
+      border-right: 1px solid var(--border);
+    }
+    .ticker-item span { color: var(--cyan); }
+    @keyframes ticker { from{transform:translateX(0)} to{transform:translateX(-50%)} }
+
+    /* ══════════════════════════════════
+       STATS
+    ══════════════════════════════════ */
+    .stats { position: relative; z-index: 2; display: grid; grid-template-columns: repeat(4,1fr); }
+    .stat {
+      padding: 48px 40px;
+      border-right: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      position: relative; overflow: hidden;
+      transition: background 0.3s;
+    }
+    .stat:last-child { border-right: none; }
+    .stat:hover { background: rgba(0,100,255,0.05); }
+    .stat::before {
+      content: ''; position: absolute; top: 0; left: 0; right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, var(--cyan), transparent);
+      opacity: 0; transition: opacity 0.3s;
+    }
+    .stat:hover::before { opacity: 1; }
+    .stat-num {
+      font-family: 'Orbitron', monospace;
+      font-size: 48px; font-weight: 700; line-height: 1;
+      color: var(--cyan); text-shadow: 0 0 20px rgba(0,200,255,0.5);
+    }
+    .stat-num sup { font-size: 22px; vertical-align: super; }
+    .stat-label {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase;
+      color: var(--grey); margin-top: 10px;
+    }
+
+    /* ══════════════════════════════════
+       SECTIONS
+    ══════════════════════════════════ */
+    section { position: relative; z-index: 2; padding: 120px 60px; }
+    .s-tag {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 10px; letter-spacing: 0.3em; text-transform: uppercase;
+      color: var(--cyan); margin-bottom: 20px;
+      display: flex; align-items: center; gap: 12px;
+    }
+    .s-tag::before {
+      content: ''; width: 30px; height: 1px;
+      background: var(--cyan); box-shadow: 0 0 6px var(--cyan);
+    }
+    .s-title {
+      font-family: 'Orbitron', monospace;
+      font-size: clamp(28px, 4vw, 52px); font-weight: 700;
+      line-height: 1.1; letter-spacing: -0.01em;
+    }
+    .s-title span { color: var(--cyan); text-shadow: 0 0 20px rgba(0,200,255,0.4); }
+
+    /* ══════════════════════════════════
+       HOW IT WORKS
+    ══════════════════════════════════ */
+    .how-grid {
+      display: grid; grid-template-columns: repeat(2,1fr);
+      gap: 1px; background: var(--border); margin-top: 64px;
+    }
+    .how-item {
+      background: var(--bg2); padding: 52px 48px;
+      position: relative; overflow: hidden;
+      transition: background 0.3s;
+    }
+    .how-item:hover { background: rgba(0,20,60,0.9); }
+    .how-item::after {
+      content: ''; position: absolute;
+      bottom: 0; left: 0; right: 0; height: 1px;
+      background: linear-gradient(90deg, transparent, var(--cyan-dim), transparent);
+    }
+    .how-num {
+      font-family: 'Orbitron', monospace;
+      font-size: 64px; font-weight: 900;
+      color: rgba(0,150,255,0.1);
+      line-height: 1; margin-bottom: 20px;
+      -webkit-text-stroke: 1px rgba(0,150,255,0.2);
+    }
+    .how-title {
+      font-family: 'Orbitron', monospace;
+      font-size: 14px; font-weight: 600;
+      letter-spacing: 0.08em; color: var(--white);
+      margin-bottom: 14px; text-transform: uppercase;
+    }
+    .how-desc { font-size: 15px; color: rgba(180,210,240,0.6); line-height: 1.75; }
+
+    /* ══════════════════════════════════
+       FEATURES
+    ══════════════════════════════════ */
+    .features-bg { background: rgba(0,5,20,0.6); }
+    .feat-grid {
+      display: grid; grid-template-columns: repeat(3,1fr);
+      gap: 1px; background: var(--border); margin-top: 64px;
+    }
+    .feat-card {
+      background: var(--bg2); padding: 44px 36px;
+      position: relative; overflow: hidden;
+      transition: background 0.3s, transform 0.3s;
+    }
+    .feat-card:hover { background: rgba(0,20,60,0.95); transform: translateY(-2px); }
+    .feat-card::before {
+      content: ''; position: absolute; top: 0; left: 0; right: 0;
+      height: 1px; background: linear-gradient(90deg, transparent, var(--cyan), transparent);
+      opacity: 0; transition: opacity 0.3s;
+    }
+    .feat-card:hover::before { opacity: 1; }
+    .feat-icon {
+      font-size: 22px; margin-bottom: 24px;
+      display: block; filter: drop-shadow(0 0 8px var(--cyan));
+    }
+    .feat-title {
+      font-family: 'Orbitron', monospace;
+      font-size: 12px; font-weight: 600;
+      letter-spacing: 0.1em; text-transform: uppercase;
+      color: var(--white); margin-bottom: 12px;
+    }
+    .feat-desc { font-size: 14px; color: rgba(180,210,240,0.55); line-height: 1.75; }
+
+    /* ══════════════════════════════════
+       PRICING
+    ══════════════════════════════════ */
+    .pricing-wrap { display: flex; justify-content: center; margin-top: 64px; }
+    .pricing-card {
+      border: 1px solid var(--border2);
+      max-width: 520px; width: 100%;
+      position: relative; overflow: hidden;
+      background: linear-gradient(135deg, rgba(0,20,60,0.9), rgba(0,5,20,0.95));
+      box-shadow: 0 0 60px rgba(0,100,255,0.15), inset 0 0 60px rgba(0,50,150,0.05);
+    }
+    .pricing-card::before {
+      content: ''; position: absolute; top: 0; left: 0; right: 0;
+      height: 2px; background: linear-gradient(90deg, transparent, var(--cyan), transparent);
+    }
+    /* Coin decorators */
+    .pricing-card::after {
+      content: ''; position: absolute;
+      bottom: 0; right: 0;
+      width: 80px; height: 80px;
+      border-right: 1px solid var(--border2);
+      border-bottom: 1px solid var(--border2);
+      clip-path: polygon(100% 0, 100% 100%, 0 100%);
+    }
+    .pc-header { padding: 48px 52px 0; }
+    .pc-plan {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 10px; letter-spacing: 0.3em; text-transform: uppercase;
+      color: var(--cyan); margin-bottom: 28px;
+      display: flex; align-items: center; gap: 10px;
+    }
+    .pc-plan::before {
+      content: ''; width: 24px; height: 1px;
+      background: var(--cyan); box-shadow: 0 0 6px var(--cyan);
+    }
+    .pc-price {
+      font-family: 'Orbitron', monospace;
+      font-size: 88px; font-weight: 900; line-height: 1;
+      color: var(--white);
+      text-shadow: 0 0 40px rgba(0,200,255,0.3);
+      display: flex; align-items: flex-start; gap: 4px;
+    }
+    .pc-price sup { font-size: 32px; color: var(--cyan); margin-top: 16px; }
+    .pc-period {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 11px; letter-spacing: 0.15em;
+      color: var(--grey); margin-top: 10px;
+    }
+    .pc-div { height: 1px; background: var(--border); margin: 40px 52px; }
+    .pc-list { padding: 0 52px; list-style: none; }
+    .pc-list li {
+      display: flex; align-items: flex-start; gap: 14px;
+      padding: 13px 0; border-bottom: 1px solid rgba(0,100,255,0.08);
+      font-size: 15px; color: rgba(200,230,255,0.75);
+    }
+    .pc-list li:last-child { border-bottom: none; }
+    .pc-list li::before {
+      content: '◆'; color: var(--cyan); font-size: 8px;
+      margin-top: 5px; flex-shrink: 0;
+      filter: drop-shadow(0 0 4px var(--cyan));
+    }
+    .pc-footer { padding: 36px 52px 52px; }
+    .pc-footer .btn-primary { width: 100%; text-align: center; font-size: 13px; padding: 18px; }
+    .pc-note {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 10px; color: var(--grey);
+      text-align: center; margin-top: 16px; letter-spacing: 0.1em;
+    }
+
+    /* ══════════════════════════════════
+       CTA FINAL
+    ══════════════════════════════════ */
+    .cta-section {
+      text-align: center;
+      border-top: 1px solid var(--border);
+      padding: 140px 60px;
+      position: relative; overflow: hidden;
+    }
+    .cta-section::before {
+      content: '';
+      position: absolute; top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      width: 600px; height: 400px;
+      background: radial-gradient(ellipse, rgba(0,100,255,0.12) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .cta-section .s-tag { justify-content: center; }
+    .cta-section .s-tag::before { display: none; }
+    .cta-section .s-title { margin-top: 16px; }
+    .cta-section p {
+      color: rgba(180,210,240,0.55); font-size: 16px;
+      max-width: 420px; margin: 24px auto 0; line-height: 1.75;
+    }
+    .cta-section .btn-primary { margin-top: 52px; font-size: 13px; padding: 18px 56px; }
+
+    /* ══════════════════════════════════
+       FOOTER
+    ══════════════════════════════════ */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 36px 60px;
+      display: flex; justify-content: space-between; align-items: center;
+      position: relative; z-index: 2;
+    }
+    .footer-logo {
+      display: flex; align-items: center; gap: 12px;
+    }
+    .footer-logo-text {
+      font-family: 'Orbitron', monospace;
+      font-size: 12px; font-weight: 700; letter-spacing: 0.12em;
+      color: var(--white);
+    }
+    .footer-logo-text span { color: var(--cyan); }
+    .footer-copy {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 10px; color: var(--grey); letter-spacing: 0.1em;
+    }
+    .footer-links { display: flex; gap: 28px; }
+    .footer-links a {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 10px; color: var(--grey); text-decoration: none;
+      letter-spacing: 0.12em; text-transform: uppercase; transition: color 0.2s;
+    }
+    .footer-links a:hover { color: var(--cyan); }
+
+
+    /* ══════════════════════════════════
+       RÉSULTATS
+    ══════════════════════════════════ */
+    .results-grid {
+      display: grid; grid-template-columns: repeat(5, 1fr);
+      gap: 1px; background: var(--border); margin-top: 64px;
+    }
+    .result-card {
+      background: var(--bg2); padding: 32px 28px;
+      position: relative; overflow: hidden; transition: background 0.3s;
+    }
+    .result-card:hover { background: rgba(0,20,60,0.95); }
+    .result-card::before {
+      content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+    }
+    .result-card.win::before { background: linear-gradient(90deg, transparent, #00ff88, transparent); }
+    .result-card.loss::before { background: linear-gradient(90deg, transparent, #ff4466, transparent); }
+    .result-pair {
+      font-family: 'Orbitron', monospace; font-size: 13px; font-weight: 700;
+      color: var(--white); margin-bottom: 6px; letter-spacing: 0.05em;
+    }
+    .result-date {
+      font-family: 'Share Tech Mono', monospace; font-size: 9px;
+      letter-spacing: 0.15em; color: var(--grey); margin-bottom: 18px; text-transform: uppercase;
+    }
+    .result-pnl { font-family: 'Orbitron', monospace; font-size: 26px; font-weight: 900; line-height: 1; }
+    .result-pnl.pos { color: #00ff88; text-shadow: 0 0 16px rgba(0,255,136,0.4); }
+    .result-pnl.neg { color: #ff4466; text-shadow: 0 0 16px rgba(255,68,102,0.3); }
+    .result-dir { font-family: 'Share Tech Mono', monospace; font-size: 9px; letter-spacing: 0.2em; margin-top: 8px; text-transform: uppercase; }
+    .result-dir.long { color: #00ff88; }
+    .result-dir.short { color: #ff4466; }
+
+    /* ══════════════════════════════════
+       TÉMOIGNAGES
+    ══════════════════════════════════ */
+    .reviews-grid {
+      display: grid; grid-template-columns: repeat(2, 1fr);
+      gap: 1px; background: var(--border); margin-top: 64px;
+    }
+    .review-card {
+      background: var(--bg2); padding: 40px 44px;
+      position: relative; overflow: hidden; transition: background 0.3s;
+    }
+    .review-card:hover { background: rgba(0,20,60,0.9); }
+    .review-stars { color: var(--cyan); font-size: 12px; letter-spacing: 4px; margin-bottom: 20px; filter: drop-shadow(0 0 4px var(--cyan)); }
+    .review-text { font-size: 15px; color: rgba(200,230,255,0.75); line-height: 1.8; font-style: italic; margin-bottom: 28px; }
+    .review-author { display: flex; align-items: center; gap: 14px; }
+    .review-avatar {
+      width: 40px; height: 40px; border-radius: 50%;
+      background: linear-gradient(135deg, var(--border2), rgba(0,100,255,0.3));
+      border: 1px solid var(--border2);
+      display: flex; align-items: center; justify-content: center;
+      font-family: 'Orbitron', monospace; font-size: 13px; font-weight: 700; color: var(--cyan);
+    }
+    .review-name { font-family: 'Orbitron', monospace; font-size: 11px; font-weight: 600; color: var(--white); letter-spacing: 0.08em; }
+    .review-handle { font-family: 'Share Tech Mono', monospace; font-size: 10px; color: var(--grey); letter-spacing: 0.1em; margin-top: 3px; }
+
+    /* ══════════════════════════════════
+       RÉSEAUX SOCIAUX
+    ══════════════════════════════════ */
+    .social-links { display: flex; gap: 12px; align-items: center; }
+    .social-link {
+      width: 36px; height: 36px; border: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: center;
+      color: var(--grey); text-decoration: none; font-size: 15px; transition: all 0.2s;
+    }
+    .social-link:hover { border-color: var(--cyan); color: var(--cyan); box-shadow: var(--glow-sm); }
+
+
+    /* ══════════════════════════════════
+       PAIEMENT
+    ══════════════════════════════════ */
+    .payment-section { background: rgba(0,5,20,0.7); }
+    .payment-intro {
+      font-size: 16px; color: rgba(200,230,255,0.6);
+      max-width: 560px; line-height: 1.75; margin-top: 20px;
+    }
+    .payment-regions {
+      display: grid; grid-template-columns: repeat(3,1fr);
+      gap: 1px; background: var(--border); margin-top: 64px;
+    }
+    .payment-region {
+      background: var(--bg2); padding: 40px 36px;
+      position: relative; overflow: hidden; transition: background 0.3s;
+    }
+    .payment-region:hover { background: rgba(0,20,60,0.95); }
+    .payment-region::before {
+      content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+      background: linear-gradient(90deg, transparent, var(--cyan), transparent);
+      opacity: 0; transition: opacity 0.3s;
+    }
+    .payment-region:hover::before { opacity: 1; }
+    .region-flag { font-size: 28px; margin-bottom: 16px; }
+    .region-name {
+      font-family: 'Orbitron', monospace; font-size: 12px; font-weight: 700;
+      letter-spacing: 0.1em; text-transform: uppercase;
+      color: var(--cyan); margin-bottom: 20px;
+    }
+    .payment-methods { display: flex; flex-direction: column; gap: 10px; }
+    .payment-method {
+      display: flex; align-items: center; gap: 12px;
+      padding: 12px 16px;
+      border: 1px solid var(--border); background: rgba(0,10,30,0.6);
+      transition: border-color 0.2s;
+    }
+    .payment-method:hover { border-color: var(--border2); }
+    .pm-icon {
+      width: 32px; height: 32px; border-radius: 6px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 16px; flex-shrink: 0;
+    }
+    .pm-name {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 11px; letter-spacing: 0.1em; color: var(--white);
+    }
+    .pm-desc { font-size: 11px; color: var(--grey); margin-top: 2px; }
+    .payment-note {
+      margin-top: 40px; padding: 24px 32px;
+      border: 1px solid var(--border); background: rgba(0,100,255,0.05);
+      display: flex; align-items: flex-start; gap: 16px;
+    }
+    .payment-note-icon { font-size: 20px; flex-shrink: 0; margin-top: 2px; }
+    .payment-note-text {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 11px; color: var(--grey); line-height: 1.7; letter-spacing: 0.05em;
+    }
+    .payment-note-text strong { color: var(--cyan); }
+
+    @media(max-width:768px) {
+      .payment-regions { grid-template-columns: 1fr; }
+      .results-grid { grid-template-columns: repeat(2,1fr); }
+      .reviews-grid { grid-template-columns: 1fr; }
+    }
+    /* ══════════════════════════════════
+       ANIMATIONS
+    ══════════════════════════════════ */
+    @keyframes fadeUp {
+      from { opacity:0; transform:translateY(28px); }
+      to   { opacity:1; transform:translateY(0); }
+    }
+    .reveal { opacity:0; transform:translateY(32px); transition: opacity 0.7s ease, transform 0.7s ease; }
+    .reveal.visible { opacity:1; transform:translateY(0); }
+
+    /* ══════════════════════════════════
+       RESPONSIVE
+    ══════════════════════════════════ */
+    @media(max-width:1024px) {
+      .hero-logo { display:none; }
+      .hero { padding:100px 32px 60px; }
+      .stats { grid-template-columns:repeat(2,1fr); }
+      .stat:nth-child(2) { border-right:none; }
+      .stat:nth-child(3) { border-right:1px solid var(--border); }
+    }
+    @media(max-width:768px) {
+      nav { padding:16px 24px; }
+      nav.scrolled { padding:12px 24px; }
+      .nav-links { display:none; }
+      section { padding:80px 24px; }
+      .how-grid { grid-template-columns:1fr; }
+      .feat-grid { grid-template-columns:1fr; }
+      footer { flex-direction:column; gap:16px; text-align:center; }
+      .footer-links { flex-wrap:wrap; justify-content:center; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav id="navbar">
+  <a href="#" class="nav-logo">
+    <!-- LOGO INLINE SVG (petit) -->
+    <svg class="nav-logo-svg" viewBox="0 0 600 650" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <radialGradient id="nb" cx="50%" cy="46%" r="50%"><stop offset="0%" stop-color="#020818"/><stop offset="100%" stop-color="#000205"/></radialGradient>
+        <radialGradient id="na" cx="50%" cy="46%" r="50%"><stop offset="0%" stop-color="#1166ff" stop-opacity="0"/><stop offset="30%" stop-color="#1166ff" stop-opacity="0"/><stop offset="48%" stop-color="#1177ff" stop-opacity="0.6"/><stop offset="58%" stop-color="#0099ff" stop-opacity="0.75"/><stop offset="68%" stop-color="#0055cc" stop-opacity="0.45"/><stop offset="80%" stop-color="#003399" stop-opacity="0.18"/><stop offset="100%" stop-color="#000510" stop-opacity="0"/></radialGradient>
+        <filter id="ng"><feGaussianBlur stdDeviation="4" result="b1"/><feGaussianBlur stdDeviation="9" result="b2"/><feMerge><feMergeNode in="b2"/><feMergeNode in="b1"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+        <filter id="nr"><feGaussianBlur stdDeviation="5" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+        <filter id="ni"><feGaussianBlur stdDeviation="5" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+      </defs>
+      <rect width="600" height="650" fill="url(#nb)"/>
+      <ellipse cx="300" cy="295" rx="290" ry="280" fill="url(#na)"/>
+      <circle cx="300" cy="290" r="160" fill="none" stroke="#88ddff" stroke-width="1.8" opacity="1" filter="url(#nr)"/>
+      <circle cx="300" cy="290" r="138" fill="none" stroke="#44aacc" stroke-width="0.9" opacity="0.5"/>
+      <circle cx="300" cy="290" r="69" fill="none" stroke="#3399bb" stroke-width="0.9" opacity="0.65"/>
+      <circle cx="300" cy="221" r="69" fill="none" stroke="#3399bb" stroke-width="0.9" opacity="0.65"/>
+      <circle cx="300" cy="359" r="69" fill="none" stroke="#3399bb" stroke-width="0.9" opacity="0.65"/>
+      <circle cx="240.2" cy="255.5" r="69" fill="none" stroke="#3399bb" stroke-width="0.9" opacity="0.65"/>
+      <circle cx="359.8" cy="255.5" r="69" fill="none" stroke="#3399bb" stroke-width="0.9" opacity="0.65"/>
+      <circle cx="240.2" cy="324.5" r="69" fill="none" stroke="#3399bb" stroke-width="0.9" opacity="0.65"/>
+      <circle cx="359.8" cy="324.5" r="69" fill="none" stroke="#3399bb" stroke-width="0.9" opacity="0.65"/>
+      <polygon points="300,130 161.2,370 438.8,370" fill="none" stroke="#b8eeff" stroke-width="1.8" opacity="1" filter="url(#ng)"/>
+      <polygon points="300,450 161.2,210 438.8,210" fill="none" stroke="#b8eeff" stroke-width="1.8" opacity="1" filter="url(#ng)"/>
+      <circle cx="300" cy="290" r="7" fill="#44ddff" opacity="0.9" filter="url(#ng)"/>
+      <circle cx="300" cy="290" r="2.5" fill="#ffffff" opacity="1"/>
+      <path d="M 300 510 C 268 483,232 483,232 510 C 232 537,268 537,300 510 C 332 483,368 483,368 510 C 368 537,332 537,300 510 Z" fill="none" stroke="#77ddff" stroke-width="2.5" opacity="1" filter="url(#ni)"/>
+    </svg>
+    <div class="nav-logo-text">M.<span>CAPITAL</span> CRYPTO</div>
+  </a>
+  <div class="nav-links">
+    <a href="#how">Fonctionnement</a>
+    <a href="#features">Avantages</a>
+    <a href="#pricing">Tarifs</a>
+  </div>
+  <a href="#pricing" class="nav-cta">Rejoindre — $38/mois</a>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-glow"></div>
+  <div class="hero-content">
+    <div class="hero-badge">LIVE · Hyperliquid · Win Rate &gt;70%</div>
+    <h1>COPIEZ<br><span class="line2">L'ÉLITE</span><br>DU MARCHÉ.</h1>
+    <p class="hero-sub">M.Capital Crypto identifie et copie les whales au win rate le plus compétitif sur Hyperliquid — automatiquement, 24h/24, sans aucune intervention requise.</p>
+    <div class="hero-actions">
+      <a href="#pricing" class="btn-primary">Commencer maintenant</a>
+      <a href="#how" class="btn-ghost">Comment ça fonctionne</a>
+    </div>
+  </div>
+  <!-- LOGO HERO -->
+  <svg class="hero-logo" viewBox="0 0 600 650" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <radialGradient id="hbg" cx="50%" cy="46%" r="50%"><stop offset="0%" stop-color="#020818"/><stop offset="100%" stop-color="#000205"/></radialGradient>
+      <radialGradient id="hau" cx="50%" cy="46%" r="50%"><stop offset="0%" stop-color="#1166ff" stop-opacity="0"/><stop offset="30%" stop-color="#1166ff" stop-opacity="0"/><stop offset="48%" stop-color="#1177ff" stop-opacity="0.6"/><stop offset="58%" stop-color="#0099ff" stop-opacity="0.75"/><stop offset="68%" stop-color="#0055cc" stop-opacity="0.45"/><stop offset="80%" stop-color="#003399" stop-opacity="0.18"/><stop offset="100%" stop-color="#000510" stop-opacity="0"/></radialGradient>
+      <filter id="hgl"><feGaussianBlur stdDeviation="4" result="b1"/><feGaussianBlur stdDeviation="9" result="b2"/><feMerge><feMergeNode in="b2"/><feMergeNode in="b1"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+      <filter id="hrg"><feGaussianBlur stdDeviation="5" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+      <filter id="hif"><feGaussianBlur stdDeviation="5" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+    </defs>
+    <rect width="600" height="650" fill="url(#hbg)"/>
+    <ellipse cx="300" cy="295" rx="290" ry="280" fill="url(#hau)"/>
+    <circle cx="300" cy="290" r="160" fill="none" stroke="#88ddff" stroke-width="1.8" filter="url(#hrg)"/>
+    <circle cx="300" cy="290" r="138" fill="none" stroke="#44aacc" stroke-width="0.9" opacity="0.5"/>
+    <circle cx="300" cy="290" r="69" fill="none" stroke="#3399bb" stroke-width="0.9" opacity="0.65"/>
+    <circle cx="300" cy="221" r="69" fill="none" stroke="#3399bb" stroke-width="0.9" opacity="0.65"/>
+    <circle cx="300" cy="359" r="69" fill="none" stroke="#3399bb" stroke-width="0.9" opacity="0.65"/>
+    <circle cx="240.2" cy="255.5" r="69" fill="none" stroke="#3399bb" stroke-width="0.9" opacity="0.65"/>
+    <circle cx="359.8" cy="255.5" r="69" fill="none" stroke="#3399bb" stroke-width="0.9" opacity="0.65"/>
+    <circle cx="240.2" cy="324.5" r="69" fill="none" stroke="#3399bb" stroke-width="0.9" opacity="0.65"/>
+    <circle cx="359.8" cy="324.5" r="69" fill="none" stroke="#3399bb" stroke-width="0.9" opacity="0.65"/>
+    <polygon points="300,130 161.2,370 438.8,370" fill="none" stroke="#b8eeff" stroke-width="1.8" filter="url(#hgl)"/>
+    <polygon points="300,450 161.2,210 438.8,210" fill="none" stroke="#b8eeff" stroke-width="1.8" filter="url(#hgl)"/>
+    <circle cx="300" cy="290" r="7" fill="#44ddff" opacity="0.9" filter="url(#hgl)"/>
+    <circle cx="300" cy="290" r="2.5" fill="#ffffff"/>
+    <path d="M 300 510 C 268 483,232 483,232 510 C 232 537,268 537,300 510 C 332 483,368 483,368 510 C 368 537,332 537,300 510 Z" fill="none" stroke="#77ddff" stroke-width="2.5" filter="url(#hif)"/>
+  </svg>
+</section>
+
+<!-- TICKER -->
+<div class="ticker-wrap">
+  <div class="ticker">
+    <div class="ticker-item">Hyperliquid <span>◆</span></div>
+    <div class="ticker-item">Copy Trading Automatisé <span>◆</span></div>
+    <div class="ticker-item">Win Rate &gt;70% <span>◆</span></div>
+    <div class="ticker-item">Alertes Telegram <span>◆</span></div>
+    <div class="ticker-item">Levier Max 5x <span>◆</span></div>
+    <div class="ticker-item">Stop-Loss −8% <span>◆</span></div>
+    <div class="ticker-item">Actif 24h/24 <span>◆</span></div>
+    <div class="ticker-item">VPS Dédié <span>◆</span></div>
+    <div class="ticker-item">Hyperliquid <span>◆</span></div>
+    <div class="ticker-item">Copy Trading Automatisé <span>◆</span></div>
+    <div class="ticker-item">Win Rate &gt;70% <span>◆</span></div>
+    <div class="ticker-item">Alertes Telegram <span>◆</span></div>
+    <div class="ticker-item">Levier Max 5x <span>◆</span></div>
+    <div class="ticker-item">Stop-Loss −8% <span>◆</span></div>
+    <div class="ticker-item">Actif 24h/24 <span>◆</span></div>
+    <div class="ticker-item">VPS Dédié <span>◆</span></div>
+  </div>
+</div>
+
+<!-- STATS -->
+<div class="stats reveal">
+  <div class="stat">
+    <div class="stat-num">70<sup>%+</sup></div>
+    <div class="stat-label">Win rate moyen des whales</div>
+  </div>
+  <div class="stat">
+    <div class="stat-num">Top<sup> 1%</sup></div>
+    <div class="stat-label">Wallets sélectionnés</div>
+  </div>
+  <div class="stat">
+    <div class="stat-num">24<sup>h</sup></div>
+    <div class="stat-label">Surveillance en continu</div>
+  </div>
+  <div class="stat">
+    <div class="stat-num">−8<sup>%</sup></div>
+    <div class="stat-label">Stop-loss global automatique</div>
+  </div>
+</div>
+
+<!-- HOW IT WORKS -->
+<section id="how">
+  <div class="s-tag reveal">Processus</div>
+  <div class="s-title reveal">COMMENT ÇA <span>FONCTIONNE</span></div>
+  <div class="how-grid reveal">
+    <div class="how-item">
+      <div class="how-num">01</div>
+      <div class="how-title">Abonnement</div>
+      <div class="how-desc">Un accès complet à $38/mois. Pas de frais cachés, pas de commission prélevée sur vos profits.</div>
+    </div>
+    <div class="how-item">
+      <div class="how-num">02</div>
+      <div class="how-title">Surveillance des whales</div>
+      <div class="how-desc">Notre bot surveille en permanence les whales au win rate le plus élevé sur Hyperliquid — les meilleurs traders de la plateforme.</div>
+    </div>
+    <div class="how-item">
+      <div class="how-num">03</div>
+      <div class="how-title">Copie automatique</div>
+      <div class="how-desc">Dès qu'une whale entre en position, le bot réplique le trade instantanément avec un ratio de 5%.</div>
+    </div>
+    <div class="how-item">
+      <div class="how-num">04</div>
+      <div class="how-title">Alertes en direct</div>
+      <div class="how-desc">Chaque trade — ouverture, fermeture, profit ou perte — est notifié en temps réel sur Telegram.</div>
+    </div>
+  </div>
+</section>
+
+<!-- FEATURES -->
+<section id="features" class="features-bg">
+  <div class="s-tag reveal">Avantages</div>
+  <div class="s-title reveal">TOUT CE QUI EST <span>INCLUS</span></div>
+  <div class="feat-grid reveal">
+    <div class="feat-card">
+      <span class="feat-icon">⚡</span>
+      <div class="feat-title">Exécution instantanée</div>
+      <div class="feat-desc">Bot hébergé sur VPS dédié. Aucun délai, aucune interruption. Vos trades s'exécutent en millisecondes.</div>
+    </div>
+    <div class="feat-card">
+      <span class="feat-icon">🛡</span>
+      <div class="feat-title">Gestion du risque</div>
+      <div class="feat-desc">Stop-loss global à −8% et levier plafonné à 5x. Le capital est protégé automatiquement à chaque position.</div>
+    </div>
+    <div class="feat-card">
+      <span class="feat-icon">📡</span>
+      <div class="feat-title">Alertes Telegram</div>
+      <div class="feat-desc">Chaque mouvement notifié en temps réel : entrée, sortie, résultat. Transparence totale sur chaque trade.</div>
+    </div>
+    <div class="feat-card">
+      <span class="feat-icon">🔍</span>
+      <div class="feat-title">Whales Elite Sélectionnées</div>
+      <div class="feat-desc">Seulement le top 1% des wallets sur Hyperliquid — filtrés sur leur win rate, leur consistance et leur historique de performance.</div>
+    </div>
+    <div class="feat-card">
+      <span class="feat-icon">⚙️</span>
+      <div class="feat-title">100% automatisé</div>
+      <div class="feat-desc">Aucune action requise de votre part. Le système trade pendant que vous dormez.</div>
+    </div>
+    <div class="feat-card">
+      <span class="feat-icon">📊</span>
+      <div class="feat-title">Hyperliquid natif</div>
+      <div class="feat-desc">Conçu exclusivement pour Hyperliquid — la plateforme de perps on-chain la plus rapide et liquide du marché.</div>
+    </div>
+  </div>
+</section>
+
+<!-- PRICING -->
+<section id="pricing">
+  <div class="s-tag reveal" style="justify-content:center;">Tarification</div>
+  <div class="s-title reveal" style="text-align:center;">UN SEUL PLAN. <span>TOUT INCLUS.</span></div>
+  <div class="pricing-wrap reveal">
+    <div class="pricing-card">
+      <div class="pc-header">
+        <div class="pc-plan">Accès Complet</div>
+        <div class="pc-price"><sup>$</sup>38</div>
+        <div class="pc-period">/ mois · Sans engagement</div>
+      </div>
+      <div class="pc-div"></div>
+      <ul class="pc-list">
+        <li>Accès au bot de copy trading Hyperliquid</li>
+        <li>Whales elite sélectionnées sur leur win rate</li>
+        <li>Alertes Telegram en temps réel</li>
+        <li>Levier configurable jusqu'à 5x</li>
+        <li>Stop-loss global automatique à −8%</li>
+        <li>Bot actif 24h/24, 7j/7 sur VPS dédié</li>
+        <li>Support & mises à jour inclus</li>
+      </ul>
+      <div class="pc-footer">
+        <a href="https://t.me/" class="btn-primary">Rejoindre M.Capital Crypto</a>
+        <div class="pc-note">Annulable à tout moment · Aucun frais caché</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- RÉSULTATS -->
+<section id="resultats" style="background:rgba(0,5,20,0.6);">
+  <div class="s-tag reveal">Performance</div>
+  <div class="s-title reveal">RÉSULTATS <span>RÉCENTS</span></div>
+  <div class="results-grid reveal">
+
+    <div class="result-card win">
+      <div class="result-pair">BTC/USD</div>
+      <div class="result-date">14 Avr 2025</div>
+      <div class="result-pnl pos">+11.4%</div>
+      <div class="result-dir long">● Long</div>
+    </div>
+
+    <div class="result-card win">
+      <div class="result-pair">ETH/USD</div>
+      <div class="result-date">13 Avr 2025</div>
+      <div class="result-pnl pos">+8.7%</div>
+      <div class="result-dir long">● Long</div>
+    </div>
+
+    <div class="result-card loss">
+      <div class="result-pair">SOL/USD</div>
+      <div class="result-date">12 Avr 2025</div>
+      <div class="result-pnl neg">−3.2%</div>
+      <div class="result-dir short">● Short</div>
+    </div>
+
+    <div class="result-card win">
+      <div class="result-pair">BTC/USD</div>
+      <div class="result-date">11 Avr 2025</div>
+      <div class="result-pnl pos">+14.1%</div>
+      <div class="result-dir short">● Short</div>
+    </div>
+
+    <div class="result-card win">
+      <div class="result-pair">ARB/USD</div>
+      <div class="result-date">10 Avr 2025</div>
+      <div class="result-pnl pos">+9.3%</div>
+      <div class="result-dir long">● Long</div>
+    </div>
+
+    <div class="result-card win">
+      <div class="result-pair">ETH/USD</div>
+      <div class="result-date">09 Avr 2025</div>
+      <div class="result-pnl pos">+6.8%</div>
+      <div class="result-dir long">● Long</div>
+    </div>
+
+    <div class="result-card loss">
+      <div class="result-pair">AVAX/USD</div>
+      <div class="result-date">08 Avr 2025</div>
+      <div class="result-pnl neg">−2.5%</div>
+      <div class="result-dir long">● Long</div>
+    </div>
+
+    <div class="result-card win">
+      <div class="result-pair">BTC/USD</div>
+      <div class="result-date">07 Avr 2025</div>
+      <div class="result-pnl pos">+12.6%</div>
+      <div class="result-dir short">● Short</div>
+    </div>
+
+    <div class="result-card win">
+      <div class="result-pair">OP/USD</div>
+      <div class="result-date">06 Avr 2025</div>
+      <div class="result-pnl pos">+7.2%</div>
+      <div class="result-dir long">● Long</div>
+    </div>
+
+    <div class="result-card win">
+      <div class="result-pair">SOL/USD</div>
+      <div class="result-date">05 Avr 2025</div>
+      <div class="result-pnl pos">+10.5%</div>
+      <div class="result-dir short">● Short</div>
+    </div>
+
+  </div>
+  <!-- Résumé stats -->
+  <div style="display:flex; gap:1px; background:var(--border); margin-top:1px;" class="reveal">
+    <div style="background:var(--bg2); flex:1; padding:28px 32px; text-align:center;">
+      <div style="font-family:'Orbitron',monospace; font-size:28px; font-weight:700; color:#00ff88; text-shadow:0 0 16px rgba(0,255,136,0.4);">8/10</div>
+      <div style="font-family:'Share Tech Mono',monospace; font-size:10px; color:var(--grey); margin-top:6px; letter-spacing:0.15em; text-transform:uppercase;">Trades gagnants</div>
+    </div>
+    <div style="background:var(--bg2); flex:1; padding:28px 32px; text-align:center;">
+      <div style="font-family:'Orbitron',monospace; font-size:28px; font-weight:700; color:var(--cyan); text-shadow:0 0 16px rgba(0,200,255,0.4);">+74.9%</div>
+      <div style="font-family:'Share Tech Mono',monospace; font-size:10px; color:var(--grey); margin-top:6px; letter-spacing:0.15em; text-transform:uppercase;">PnL cumulé (10 trades)</div>
+    </div>
+    <div style="background:var(--bg2); flex:1; padding:28px 32px; text-align:center;">
+      <div style="font-family:'Orbitron',monospace; font-size:28px; font-weight:700; color:#00ff88; text-shadow:0 0 16px rgba(0,255,136,0.4);">80%</div>
+      <div style="font-family:'Share Tech Mono',monospace; font-size:10px; color:var(--grey); margin-top:6px; letter-spacing:0.15em; text-transform:uppercase;">Win rate sur la période</div>
+    </div>
+  </div>
+</section>
+
+<!-- TÉMOIGNAGES -->
+<section id="avis">
+  <div class="s-tag reveal">Communauté</div>
+  <div class="s-title reveal">CE QUE DISENT <span>NOS MEMBRES</span></div>
+  <div class="reviews-grid reveal">
+
+    <div class="review-card">
+      <div class="review-stars">★★★★★</div>
+      <div class="review-text">"Franchement impressionné. Le bot a copié une position BTC short au bon moment et j'ai fait +12% en une nuit. Je n'aurais jamais eu ce timing tout seul."</div>
+      <div class="review-author">
+        <div class="review-avatar">AL</div>
+        <div>
+          <div class="review-name">Alex L.</div>
+          <div class="review-handle">@alex_trades · Montréal</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="review-card">
+      <div class="review-stars">★★★★★</div>
+      <div class="review-text">"Le fait de recevoir les alertes Telegram en temps réel c'est énorme. Je suis exactement ce qui se passe, et les whales suivies ont un win rate vraiment solide."</div>
+      <div class="review-author">
+        <div class="review-avatar">SR</div>
+        <div>
+          <div class="review-name">Sofia R.</div>
+          <div class="review-handle">@sofi_crypto · Paris</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="review-card">
+      <div class="review-stars">★★★★★</div>
+      <div class="review-text">"J'avais essayé d'autres signaux avant mais rien de comparable. Ici c'est automatique, transparent, et les résultats parlent d'eux-mêmes. Abonnement remboursé en 2 jours."</div>
+      <div class="review-author">
+        <div class="review-avatar">KM</div>
+        <div>
+          <div class="review-name">Kevin M.</div>
+          <div class="review-handle">@kev_defi · Bruxelles</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="review-card">
+      <div class="review-stars">★★★★☆</div>
+      <div class="review-text">"Très bon service. Il y a eu un trade perdant mais le stop-loss a bien limité la casse. Sur l'ensemble du mois je suis largement positif. Le rapport qualité/prix à $38 est imbattable."</div>
+      <div class="review-author">
+        <div class="review-avatar">JD</div>
+        <div>
+          <div class="review-name">Julie D.</div>
+          <div class="review-handle">@julie_hl · Lyon</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="review-card">
+      <div class="review-stars">★★★★★</div>
+      <div class="review-text">"Ce que j'apprécie c'est la sélection des whales. Ce ne sont pas des comptes aléatoires — on sent que c'est du travail de recherche sérieux derrière. Résultats consistants."</div>
+      <div class="review-author">
+        <div class="review-avatar">TN</div>
+        <div>
+          <div class="review-name">Thomas N.</div>
+          <div class="review-handle">@thomas_perps · Genève</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="review-card">
+      <div class="review-stars">★★★★★</div>
+      <div class="review-text">"Parfait pour quelqu'un comme moi qui travaille et n'a pas le temps de surveiller les marchés. Le bot tourne tout seul, les alertes arrivent et je vois mon compte progresser."</div>
+      <div class="review-author">
+        <div class="review-avatar">MA</div>
+        <div>
+          <div class="review-name">Marc A.</div>
+          <div class="review-handle">@marc_web3 · Toulouse</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="review-card">
+      <div class="review-stars">★★★★★</div>
+      <div class="review-text">"Le meilleur investissement que j'ai fait en crypto cette année. Pas de promesses folles, juste des résultats solides et réguliers. Je recommande à 100%."</div>
+      <div class="review-author">
+        <div class="review-avatar">RB</div>
+        <div>
+          <div class="review-name">Rachel B.</div>
+          <div class="review-handle">@rach_crypto · Québec</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="review-card">
+      <div class="review-stars">★★★★★</div>
+      <div class="review-text">"J'étais sceptique au début mais après 3 semaines les chiffres sont là. Le win rate affiché correspond vraiment à ce que j'observe dans mon compte. Très sérieux."</div>
+      <div class="review-author">
+        <div class="review-avatar">LP</div>
+        <div>
+          <div class="review-name">Lucas P.</div>
+          <div class="review-handle">@lucas_hl · Bordeaux</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="review-card">
+      <div class="review-stars">★★★★☆</div>
+      <div class="review-text">"Bonne expérience globale. Le support est réactif et les mises à jour du bot sont régulières. On voit que le projet évolue dans la bonne direction."</div>
+      <div class="review-author">
+        <div class="review-avatar">CM</div>
+        <div>
+          <div class="review-name">Clara M.</div>
+          <div class="review-handle">@clara_defi · Nice</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="review-card">
+      <div class="review-stars">★★★★★</div>
+      <div class="review-text">"Le copie trading sur Hyperliquid c'est clairement l'avenir. Et M.Capital Crypto l'a bien compris. Setup simple, résultats clairs, alertes instantanées. Que demander de plus ?"</div>
+      <div class="review-author">
+        <div class="review-avatar">YK</div>
+        <div>
+          <div class="review-name">Yann K.</div>
+          <div class="review-handle">@yann_perps · Lausanne</div>
+        </div>
+      </div>
+    </div>
+
+
+    <div class="review-card">
+      <div class="review-stars">★★★★★</div>
+      <div class="review-text">"Je suis basé à Dakar et j'avais du mal à trouver des services crypto sérieux adaptés à notre région. M.Capital Crypto m'a surpris — les résultats sont réels et le support est très disponible."</div>
+      <div class="review-author">
+        <div class="review-avatar">OD</div>
+        <div>
+          <div class="review-name">Oumar D.</div>
+          <div class="review-handle">@oumar_crypto · Dakar, Sénégal</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="review-card">
+      <div class="review-stars">★★★★★</div>
+      <div class="review-text">"Depuis Abidjan je cherchais un moyen de faire travailler mon capital intelligemment. Le copy trading sur Hyperliquid avec M.Capital c'est exactement ça. Simple, automatique et rentable."</div>
+      <div class="review-author">
+        <div class="review-avatar">KK</div>
+        <div>
+          <div class="review-name">Kofi K.</div>
+          <div class="review-handle">@kofi_hl · Abidjan, Côte d'Ivoire</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="review-card">
+      <div class="review-stars">★★★★★</div>
+      <div class="review-text">"Très professionnel. Les alertes Telegram arrivent en temps réel même depuis Lomé. Le win rate est vraiment au rendez-vous — je recommande à tous mes contacts traders."</div>
+      <div class="review-author">
+        <div class="review-avatar">AK</div>
+        <div>
+          <div class="review-name">Afi K.</div>
+          <div class="review-handle">@afi_web3 · Lomé, Togo</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="review-card">
+      <div class="review-stars">★★★★☆</div>
+      <div class="review-text">"I discovered M.Capital Crypto through a friend in Lagos. The bot has been running smoothly for weeks now. Solid win rate, clean alerts, and no hidden fees. Exactly what I was looking for."</div>
+      <div class="review-author">
+        <div class="review-avatar">EC</div>
+        <div>
+          <div class="review-name">Emeka C.</div>
+          <div class="review-handle">@emeka_defi · Lagos, Nigeria</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="review-card">
+      <div class="review-stars">★★★★★</div>
+      <div class="review-text">"As a trader in Accra, finding reliable copy trading services is not easy. M.Capital Crypto delivers consistently. The whale selection is top-notch and the Telegram updates are instant."</div>
+      <div class="review-author">
+        <div class="review-avatar">KA</div>
+        <div>
+          <div class="review-name">Kwame A.</div>
+          <div class="review-handle">@kwame_perps · Accra, Ghana</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="review-card">
+      <div class="review-stars">★★★★★</div>
+      <div class="review-text">"Singapore's crypto scene is competitive but M.Capital Crypto stands out. The whales they track have an impressive track record. I've been profitable every week since joining."</div>
+      <div class="review-author">
+        <div class="review-avatar">WL</div>
+        <div>
+          <div class="review-name">Wei L.</div>
+          <div class="review-handle">@wei_trades · Singapore</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="review-card">
+      <div class="review-stars">★★★★★</div>
+      <div class="review-text">"Based in Singapore and trading Hyperliquid perps daily. M.Capital's bot copies the right wallets at the right time. The risk management is solid — stop-loss saved me twice already."</div>
+      <div class="review-author">
+        <div class="review-avatar">RS</div>
+        <div>
+          <div class="review-name">Ravi S.</div>
+          <div class="review-handle">@ravi_hl · Singapore</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+
+<!-- PAIEMENT -->
+<section id="paiement" class="payment-section">
+  <div class="s-tag reveal">Paiement</div>
+  <div class="s-title reveal">PAYEZ DEPUIS <span>N'IMPORTE OÙ</span></div>
+  <p class="payment-intro reveal">Plusieurs méthodes de paiement disponibles selon votre région. Simple, rapide et sécurisé.</p>
+
+  <div class="payment-regions reveal">
+
+    <!-- AFRIQUE DE L'OUEST -->
+    <div class="payment-region">
+      <div class="region-flag">🌍</div>
+      <div class="region-name">Afrique de l'Ouest</div>
+      <div class="payment-methods">
+        <div class="payment-method">
+          <div class="pm-icon" style="background:rgba(0,150,100,0.15);">📱</div>
+          <div>
+            <div class="pm-name">Wave</div>
+            <div class="pm-desc">Sénégal, Côte d'Ivoire, Mali, Burkina</div>
+          </div>
+        </div>
+        <div class="payment-method">
+          <div class="pm-icon" style="background:rgba(255,100,0,0.15);">📲</div>
+          <div>
+            <div class="pm-name">Orange Money</div>
+            <div class="pm-desc">Sénégal, CI, Cameroun, Mali, Guinée</div>
+          </div>
+        </div>
+        <div class="payment-method">
+          <div class="pm-icon" style="background:rgba(0,180,255,0.15);">₿</div>
+          <div>
+            <div class="pm-name">USDT / USDC</div>
+            <div class="pm-desc">TRC20 · ERC20 · Binance Pay</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- INTERNATIONAL / CRYPTO -->
+    <div class="payment-region">
+      <div class="region-flag">🌐</div>
+      <div class="region-name">International · Crypto</div>
+      <div class="payment-methods">
+        <div class="payment-method">
+          <div class="pm-icon" style="background:rgba(0,180,255,0.15);">💎</div>
+          <div>
+            <div class="pm-name">USDT · USDC</div>
+            <div class="pm-desc">TRC20 · ERC20 · BEP20 · Arbitrum</div>
+          </div>
+        </div>
+        <div class="payment-method">
+          <div class="pm-icon" style="background:rgba(240,185,11,0.15);">🔶</div>
+          <div>
+            <div class="pm-name">Binance Pay</div>
+            <div class="pm-desc">Paiement instantané via Binance</div>
+          </div>
+        </div>
+        <div class="payment-method">
+          <div class="pm-icon" style="background:rgba(100,100,255,0.15);">⬡</div>
+          <div>
+            <div class="pm-name">Crypto direct</div>
+            <div class="pm-desc">BTC · ETH · SOL sur demande</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- EUROPE / ASIE / AMÉRIQUE -->
+    <div class="payment-region">
+      <div class="region-flag">🇪🇺🇸🇬🇨🇦</div>
+      <div class="region-name">Europe · Asie · Amériques</div>
+      <div class="payment-methods">
+        <div class="payment-method">
+          <div class="pm-icon" style="background:rgba(99,91,255,0.15);">💳</div>
+          <div>
+            <div class="pm-name">Stripe</div>
+            <div class="pm-desc">Visa · Mastercard · Amex</div>
+          </div>
+        </div>
+        <div class="payment-method">
+          <div class="pm-icon" style="background:rgba(0,112,240,0.15);">🅿</div>
+          <div>
+            <div class="pm-name">PayPal</div>
+            <div class="pm-desc">Disponible dans 200+ pays</div>
+          </div>
+        </div>
+        <div class="payment-method">
+          <div class="pm-icon" style="background:rgba(0,180,255,0.15);">💎</div>
+          <div>
+            <div class="pm-name">USDT / USDC</div>
+            <div class="pm-desc">TRC20 · ERC20 · Arbitrum</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="payment-note reveal">
+    <div class="payment-note-icon">🔒</div>
+    <div class="payment-note-text">
+      <strong>Paiement 100% sécurisé.</strong> Vos transactions sont traitées via des plateformes certifiées. 
+      Aucune donnée bancaire n'est stockée sur nos serveurs. 
+      Après confirmation du paiement, votre accès est activé sous <strong>24h maximum</strong> via Telegram.
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section" id="contact">
+  <div class="s-tag reveal">Prêt ?</div>
+  <div class="s-title reveal">ARRÊTEZ DE REGARDER.<br><span>COMMENCEZ À TRADER.</span></div>
+  <p class="reveal">Rejoignez M.Capital Crypto et laissez les meilleures whales du marché trader à votre place, automatiquement.</p>
+  <a href="https://t.me/" class="btn-primary reveal">Nous rejoindre sur Telegram</a>
+  <div class="reveal" style="display:flex; gap:12px; justify-content:center; margin-top:24px;">
+    <a href="https://t.me/" class="social-link" title="Telegram" target="_blank">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.562 8.248l-2.018 9.505c-.145.658-.537.818-1.084.508l-3-2.21-1.447 1.394c-.16.16-.295.295-.605.295l.213-3.053 5.56-5.023c.242-.213-.054-.333-.373-.12L7.19 14.447l-2.965-.924c-.643-.204-.657-.643.136-.953l11.57-4.461c.537-.194 1.006.131.632.14z"/></svg>
+    </a>
+    <a href="https://instagram.com/" class="social-link" title="Instagram" target="_blank">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+    </a>
+    <a href="https://x.com/" class="social-link" title="X" target="_blank">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+    </a>
+    <a href="https://tiktok.com/" class="social-link" title="TikTok" target="_blank">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-2.88 2.5 2.89 2.89 0 01-2.89-2.89 2.89 2.89 0 012.89-2.89c.28 0 .54.04.79.1V9.01a6.33 6.33 0 00-.79-.05 6.34 6.34 0 00-6.34 6.34 6.34 6.34 0 006.34 6.34 6.34 6.34 0 006.33-6.34V8.69a8.18 8.18 0 004.78 1.52V6.75a4.85 4.85 0 01-1.01-.06z"/></svg>
+    </a>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">
+    <svg width="28" height="28" viewBox="0 0 600 650" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <radialGradient id="fb" cx="50%" cy="46%" r="50%"><stop offset="0%" stop-color="#020818"/><stop offset="100%" stop-color="#000205"/></radialGradient>
+        <radialGradient id="fa" cx="50%" cy="46%" r="50%"><stop offset="48%" stop-color="#1177ff" stop-opacity="0.6"/><stop offset="58%" stop-color="#0099ff" stop-opacity="0.75"/><stop offset="80%" stop-color="#003399" stop-opacity="0.1"/><stop offset="100%" stop-color="#000510" stop-opacity="0"/></radialGradient>
+        <filter id="fg"><feGaussianBlur stdDeviation="5" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+      </defs>
+      <rect width="600" height="650" fill="url(#fb)"/>
+      <ellipse cx="300" cy="295" rx="290" ry="280" fill="url(#fa)"/>
+      <circle cx="300" cy="290" r="160" fill="none" stroke="#88ddff" stroke-width="2" filter="url(#fg)"/>
+      <polygon points="300,130 161.2,370 438.8,370" fill="none" stroke="#b8eeff" stroke-width="2" filter="url(#fg)"/>
+      <polygon points="300,450 161.2,210 438.8,210" fill="none" stroke="#b8eeff" stroke-width="2" filter="url(#fg)"/>
+    </svg>
+    <div class="footer-logo-text">M.<span>CAPITAL</span> CRYPTO</div>
+  </div>
+  <div class="footer-copy">© 2025 M.Capital Crypto · Tous droits réservés</div>
+  <div style="display:flex; flex-direction:column; align-items:flex-end; gap:12px;">
+    <div class="social-links">
+      <a href="https://t.me/" class="social-link" title="Telegram" target="_blank">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.562 8.248l-2.018 9.505c-.145.658-.537.818-1.084.508l-3-2.21-1.447 1.394c-.16.16-.295.295-.605.295l.213-3.053 5.56-5.023c.242-.213-.054-.333-.373-.12L7.19 14.447l-2.965-.924c-.643-.204-.657-.643.136-.953l11.57-4.461c.537-.194 1.006.131.632.14z"/></svg>
+      </a>
+      <a href="https://instagram.com/" class="social-link" title="Instagram" target="_blank">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+      </a>
+      <a href="https://x.com/" class="social-link" title="X / Twitter" target="_blank">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+      </a>
+      <a href="https://tiktok.com/" class="social-link" title="TikTok" target="_blank">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-2.88 2.5 2.89 2.89 0 01-2.89-2.89 2.89 2.89 0 012.89-2.89c.28 0 .54.04.79.1V9.01a6.33 6.33 0 00-.79-.05 6.34 6.34 0 00-6.34 6.34 6.34 6.34 0 006.34 6.34 6.34 6.34 0 006.33-6.34V8.69a8.18 8.18 0 004.78 1.52V6.75a4.85 4.85 0 01-1.01-.06z"/></svg>
+      </a>
+    </div>
+    <div class="footer-links">
+      <a href="#">Mentions légales</a>
+      <a href="#">Risques</a>
+      <a href="#">Contact</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // Navbar scroll
+  const nav = document.getElementById('navbar');
+  window.addEventListener('scroll', () => {
+    nav.classList.toggle('scrolled', window.scrollY > 40);
+  });
+
+  // Reveal on scroll
+  const reveals = document.querySelectorAll('.reveal');
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach((e, i) => {
+      if (e.isIntersecting) {
+        setTimeout(() => e.target.classList.add('visible'), i * 80);
+      }
+    });
+  }, { threshold: 0.1 });
+  reveals.forEach(el => obs.observe(el));
+</script>
+
+</body>
+</html>
