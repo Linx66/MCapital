@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32">
+  <defs>
+    <radialGradient id="bg" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#030d2e"/>
+      <stop offset="100%" stop-color="#010308"/>
+    </radialGradient>
+    <radialGradient id="aura" cx="50%" cy="50%" r="50%">
+      <stop offset="40%" stop-color="#1177ff" stop-opacity="0"/>
+      <stop offset="55%" stop-color="#0099ff" stop-opacity="0.7"/>
+      <stop offset="75%" stop-color="#0055cc" stop-opacity="0.3"/>
+      <stop offset="100%" stop-color="#000510" stop-opacity="0"/>
+    </radialGradient>
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="0.5" result="b1"/>
+      <feGaussianBlur stdDeviation="1" result="b2"/>
+      <feMerge><feMergeNode in="b2"/><feMergeNode in="b1"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+  <rect width="32" height="32" fill="url(#bg)" rx="6"/>
+  <ellipse cx="16" cy="15" rx="15" ry="14" fill="url(#aura)"/>
+  <circle cx="16" cy="15" r="10" fill="none" stroke="#88ddff" stroke-width="0.8" filter="url(#glow)"/>
+  <polygon points="16,5 8,20 24,20" fill="none" stroke="#c8f4ff" stroke-width="0.9" filter="url(#glow)"/>
+  <polygon points="16,25 8,10 24,10" fill="none" stroke="#c8f4ff" stroke-width="0.9" filter="url(#glow)"/>
+  <circle cx="16" cy="15" r="1.5" fill="#44ddff" filter="url(#glow)"/>
+</svg>
